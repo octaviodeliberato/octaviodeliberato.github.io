@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Octavio Deliberato Neto — Data Science & Process Optimization</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-primary: #07080f;
+      --bg-secondary: #0d0f1a;
+      --bg-card: #111425;
+      --bg-card-hover: #161a2e;
+      --border: rgba(255,255,255,0.06);
+      --border-hover: rgba(0, 210, 190, 0.35);
+      --accent: #00d2be;
+      --accent-dim: rgba(0, 210, 190, 0.12);
+      --accent-glow: rgba(0, 210, 190, 0.25);
+      --text-primary: #e8eaf0;
+      --text-secondary: #8b92ad;
+      --text-muted: #555d7a;
+      --heading: #ffffff;
+      --font-head: 'Outfit', sans-serif;
+      --font-body: 'Source Sans 3', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius: 12px;
+      --radius-lg: 20px;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background var(--transition), backdrop-filter var(--transition), border-bottom var(--transition);
+    }
+
+    nav.scrolled {
+      background: rgba(7, 8, 15, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--heading);
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    .nav-logo span {
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color var(--transition);
+      letter-spacing: 0.01em;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    .nav-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      color: var(--text-primary);
+    }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8rem 2rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.18;
+    }
+
+    .hero-orb-1 {
+      width: 600px;
+      height: 600px;
+      top: -100px;
+      right: -100px;
+      background: radial-gradient(circle, #00d2be, transparent 70%);
+    }
+
+    .hero-orb-2 {
+      width: 400px;
+      height: 400px;
+      bottom: -50px;
+      left: -100px;
+      background: radial-gradient(circle, #0055ff, transparent 70%);
+      opacity: 0.12;
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+    }
+
+    .hero-content {
+      max-width: 860px;
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .hero-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(0, 210, 190, 0.2);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 0.78rem;
+      font-family: var(--font-mono);
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+
+    .hero-label::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .hero-name {
+      font-family: var(--font-head);
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 800;
+      color: var(--heading);
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-name span {
+      color: var(--accent);
+    }
+
+    .hero-title {
+      font-family: var(--font-head);
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-weight: 300;
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
+      margin-bottom: 1.8rem;
+    }
+
+    .hero-desc {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 640px;
+      margin: 0 auto 2.8rem;
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-family: var(--font-head);
+      font-size: 0.95rem;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all var(--transition);
+      border: 1px solid transparent;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #07080f;
+      border-color: var(--accent);
+    }
+
+    .btn-primary:hover {
+      background: #00f0d8;
+      box-shadow: 0 0 30px var(--accent-glow);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text-primary);
+      border-color: var(--border);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+      transform: translateY(-2px);
+    }
+
+    .hero-scroll {
+      margin-top: 5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .hero-scroll-line {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scroll-line 2s ease-in-out infinite;
+    }
+
+    @keyframes scroll-line {
+      0% { transform: scaleY(0); transform-origin: top; }
+      50% { transform: scaleY(1); transform-origin: top; }
+      51% { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* ─── SECTIONS ─── */
+    section {
+      padding: 7rem 2rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: var(--font-head);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: var(--heading);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+    }
+
+    .section-sub {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      max-width: 560px;
+      line-height: 1.75;
+    }
+
+    .section-divider {
+      width: 48px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin: 1.5rem 0 3rem;
+    }
+
+    /* ─── ABOUT ─── */
+    #about {
+      background: var(--bg-secondary);
+      position: relative;
+    }
+
+    #about::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.3;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      margin-bottom: 1.2rem;
+      line-height: 1.8;
+    }
+
+    .about-text p strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin-top: 2rem;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.4rem;
+    }
+
+    .stat-num {
+      font-family: var(--font-head);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .skills-section-title {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      margin-top: 2rem;
+    }
+
+    .skills-group {
+      margin-bottom: 1.8rem;
+    }
+
+    .skills-group-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.7rem;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-family: var(--font-mono);
+      font-weight: 500;
+      border: 1px solid;
+      transition: all var(--transition);
+      cursor: default;
+    }
+
+    .tag:hover {
+      transform: translateY(-2px);
+    }
+
+    .tag-python { background: rgba(55,118,171,0.12); border-color: rgba(55,118,171,0.35); color: #4d9fdb; }
+    .tag-r { background: rgba(39,109,195,0.12); border-color: rgba(39,109,195,0.35); color: #6fa8e8; }
+    .tag-go { background: rgba(0,173,216,0.12); border-color: rgba(0,173,216,0.35); color: #00add8; }
+    .tag-sql { background: rgba(255,160,0,0.1); border-color: rgba(255,160,0,0.3); color: #ffa500; }
+    .tag-ml { background: rgba(0,210,190,0.1); border-color: rgba(0,210,190,0.3); color: #00d2be; }
+    .tag-devops { background: rgba(255,100,100,0.1); border-color: rgba(255,100,100,0.3); color: #ff7070; }
+    .tag-iot { background: rgba(140,100,255,0.1); border-color: rgba(140,100,255,0.3); color: #a07aff; }
+
+    /* ─── PROJECTS ─── */
+    #projects {
+      background: var(--bg-primary);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-lg);
+      opacity: 0;
+      transition: opacity var(--transition);
+      pointer-events: none;
+    }
+
+    .project-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 30px var(--accent-glow);
+    }
+
+    .project-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .project-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .icon-python { background: rgba(55,118,171,0.15); color: #4d9fdb; border: 1px solid rgba(55,118,171,0.3); }
+    .icon-r { background: rgba(39,109,195,0.15); color: #6fa8e8; border: 1px solid rgba(39,109,195,0.3); }
+    .icon-go { background: rgba(0,173,216,0.15); color: #00add8; border: 1px solid rgba(0,173,216,0.3); }
+
+    .project-arrow {
+      color: var(--text-muted);
+      transition: all var(--transition);
+    }
+
+    .project-card:hover .project-arrow {
+      color: var(--accent);
+      transform: translate(3px, -3px);
+    }
+
+    .project-name {
+      font-family: var(--font-head);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--heading);
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.01em;
+    }
+
+    .project-desc {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .project-client {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      margin-bottom: 1.2rem;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .project-tag {
+      padding: 3px 10px;
+      border-radius: 5px;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      font-weight: 500;
+      border: 1px solid;
+    }
+
+    /* ─── EXPERIENCE ─── */
+    #experience {
+      background: var(--bg-secondary);
+      position: relative;
+    }
+
+    #experience::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.2;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent), rgba(0,210,190,0.05));
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 0 0 3.5rem 2.5rem;
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -6px;
+      top: 10px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--bg-secondary);
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    .timeline-dot.dim {
+      border-color: var(--text-muted);
+      box-shadow: none;
+    }
+
+    .timeline-period {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.4rem;
+    }
+
+    .timeline-period.dim {
+      color: var(--text-muted);
+    }
+
+    .timeline-role {
+      font-family: var(--font-head);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--heading);
+      letter-spacing: -0.01em;
+      margin-bottom: 3px;
+    }
+
+    .timeline-company {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .timeline-body {
+      color: var(--text-secondary);
+      font-size: 0.93rem;
+      line-height: 1.75;
+    }
+
+    .timeline-body ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .timeline-body ul li {
+      position: relative;
+      padding-left: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-body ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 0.8rem;
+    }
+
+    /* ─── EDUCATION ─── */
+    .edu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.2rem;
+      margin-top: 3rem;
+    }
+
+    .edu-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.6rem;
+      transition: border-color var(--transition);
+    }
+
+    .edu-card:hover {
+      border-color: rgba(0,210,190,0.25);
+    }
+
+    .edu-degree {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--heading);
+      margin-bottom: 4px;
+    }
+
+    .edu-school {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .edu-year {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+    }
+
+    /* ─── CONTACT ─── */
+    #contact {
+      background: var(--bg-primary);
+      text-align: center;
+    }
+
+    .contact-card {
+      max-width: 620px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 4rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+
+    .contact-headline {
+      font-family: var(--font-head);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 700;
+      color: var(--heading);
+      margin-bottom: 0.8rem;
+      letter-spacing: -0.02em;
+    }
+
+    .contact-sub {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color var(--transition);
+      font-family: var(--font-mono);
+    }
+
+    .contact-link:hover {
+      color: var(--accent);
+    }
+
+    .contact-link svg {
+      color: var(--accent);
+    }
+
+    .contact-cta-row {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-copy {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      transition: color var(--transition);
+    }
+
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+
+    /* ─── FADE IN ANIMATIONS ─── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade-in-delay-1 { transition-delay: 0.1s; }
+    .fade-in-delay-2 { transition-delay: 0.2s; }
+    .fade-in-delay-3 { transition-delay: 0.3s; }
+    .fade-in-delay-4 { transition-delay: 0.4s; }
+    .fade-in-delay-5 { transition-delay: 0.5s; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: rgba(7,8,15,0.97);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        padding: 2rem;
+        gap: 1.5rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-menu-btn {
+        display: block;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-card {
+        padding: 2.5rem 1.5rem;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      section {
+        padding: 5rem 1.5rem;
+      }
+
+      .hero-cta {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .about-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .edu-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── NAVBAR ─── -->
+  <nav id="navbar">
+    <a href="#hero" class="nav-logo">OD<span>.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about" onclick="closeMenu()">Sobre</a></li>
+      <li><a href="#projects" onclick="closeMenu()">Projetos</a></li>
+      <li><a href="#experience" onclick="closeMenu()">Experiência</a></li>
+      <li><a href="#contact" onclick="closeMenu()">Contato</a></li>
+    </ul>
+    <button class="nav-menu-btn" id="menuBtn" aria-label="Menu" onclick="toggleMenu()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </nav>
+
+  <!-- ─── HERO ─── -->
+  <section id="hero">
+    <div class="hero-bg">
+      <div class="hero-grid"></div>
+      <div class="hero-orb hero-orb-1"></div>
+      <div class="hero-orb hero-orb-2"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-label">Disponível para novos projetos</div>
+      <h1 class="hero-name">Octavio<br><span>Deliberato Neto</span></h1>
+      <p class="hero-title">Data Scientist &nbsp;·&nbsp; MLOps Engineer &nbsp;·&nbsp; Industrial Optimization</p>
+      <p class="hero-desc">
+        Especialista com mais de 16 anos em modelagem, simulação e otimização de processos industriais.
+        Criando soluções de ponta a ponta — da engenharia de dados ao deploy em produção — para o setor mineral e de manufatura.
+      </p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Ver Projetos
+        </a>
+        <a href="https://www.linkedin.com/in/odneto" target="_blank" rel="noopener" class="btn btn-outline">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+        <a href="https://github.com/octaviodeliberato" target="_blank" rel="noopener" class="btn btn-outline">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          GitHub
+        </a>
+      </div>
+      <div class="hero-scroll">
+        <div class="hero-scroll-line"></div>
+        <span>scroll</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── ABOUT ─── -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text fade-in">
+          <p class="section-label">// sobre mim</p>
+          <h2 class="section-title">Onde engenharia encontra inteligência de dados</h2>
+          <div class="section-divider"></div>
+          <p>
+            Sou engenheiro de minas formado pela <strong>USP</strong> com mestrado em Tratamento de Minérios e um Postgraduate Certificate pela <strong>University of Leeds</strong> (graduado com distinção). Ao longo de mais de 16 anos, transitei da operação direta de plantas industriais para o desenvolvimento de sistemas de software de alta performance.
+          </p>
+          <p>
+            Minha atuação combina profundo domínio de processos de <strong>cominuição e classificação</strong> com expertise em <strong>MLOps, Engenharia de Dados e desenvolvimento backend</strong> em Python, R e Go — construindo soluções que realmente chegam à produção e geram impacto mensurável.
+          </p>
+          <p>
+            Atualmente como Diretor de Serviços Técnicos na <strong>AGX Soluções</strong>, lidero projetos de inteligência industrial para clientes como Nexa Resources, Haver & Boecker e Metso Minerals.
+          </p>
+        </div>
+        <div class="fade-in fade-in-delay-2">
+          <div class="about-stats">
+            <div class="stat-card">
+              <div class="stat-num">16+</div>
+              <div class="stat-label">anos de experiência em projetos técnicos</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num">3</div>
+              <div class="stat-label">linguagens de produção: Python, R e Go</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num">30%</div>
+              <div class="stat-label">de ganho em OEE documentado em planta real</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num">USP</div>
+              <div class="stat-label">mestrado em Engenharia Mineral</div>
+            </div>
+          </div>
+
+          <div class="skills-group" style="margin-top: 2.5rem;">
+            <div class="skills-group-label">Linguagens</div>
+            <div class="tags">
+              <span class="tag tag-python">Python</span>
+              <span class="tag tag-r">R</span>
+              <span class="tag tag-go">Go</span>
+              <span class="tag tag-sql">SQL</span>
+              <span class="tag tag-devops">Shell Script</span>
+            </div>
+          </div>
+
+          <div class="skills-group">
+            <div class="skills-group-label">Data &amp; ML Stack</div>
+            <div class="tags">
+              <span class="tag tag-ml">Databricks</span>
+              <span class="tag tag-ml">MLflow</span>
+              <span class="tag tag-ml">AutoGluon</span>
+              <span class="tag tag-ml">PySpark</span>
+              <span class="tag tag-ml">Pymoo</span>
+              <span class="tag tag-ml">MLForecast</span>
+              <span class="tag tag-ml">DuckDB</span>
+              <span class="tag tag-ml">Parquet</span>
+            </div>
+          </div>
+
+          <div class="skills-group">
+            <div class="skills-group-label">DevOps / MLOps</div>
+            <div class="tags">
+              <span class="tag tag-devops">Docker</span>
+              <span class="tag tag-devops">Kubernetes</span>
+              <span class="tag tag-devops">Terraform</span>
+              <span class="tag tag-devops">AWS S3</span>
+              <span class="tag tag-devops">GitHub Actions</span>
+              <span class="tag tag-devops">Nix</span>
+            </div>
+          </div>
+
+          <div class="skills-group">
+            <div class="skills-group-label">Industrial / IoT</div>
+            <div class="tags">
+              <span class="tag tag-iot">OPC-UA</span>
+              <span class="tag tag-iot">FFT / TWF</span>
+              <span class="tag tag-iot">Simulação de Processos</span>
+              <span class="tag tag-iot">Otimização Multi-objetivo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PROJECTS ─── -->
+  <section id="projects">
+    <div class="container">
+      <p class="section-label fade-in">// projetos</p>
+      <h2 class="section-title fade-in fade-in-delay-1">Soluções construídas para produção</h2>
+      <p class="section-sub fade-in fade-in-delay-2">Projetos desenvolvidos no contexto de indústrias reais — da arquitetura ao deploy — com foco em performance, escalabilidade e impacto operacional.</p>
+      <div class="section-divider fade-in fade-in-delay-3"></div>
+
+      <div class="projects-grid">
+
+        <!-- Nexa TM Autoclaves -->
+        <article class="project-card fade-in">
+          <div class="project-card-header">
+            <div class="project-icon icon-python">PY</div>
+            <svg class="project-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </div>
+          <h3 class="project-name">Nexa TM Autoclaves</h3>
+          <span class="project-client">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+            Nexa Resources — Três Marias
+          </span>
+          <p class="project-desc">
+            Pipeline de Machine Learning no Databricks para predição do desempenho do sistema de autoclaves de pressão. Utiliza AutoGluon para AutoML e MLflow para tracking de experimentos, versionamento de modelos e deploy controlado.
+          </p>
+          <div class="project-tags">
+            <span class="project-tag tag-python">Python</span>
+            <span class="project-tag tag-ml">Databricks</span>
+            <span class="project-tag tag-ml">AutoGluon</span>
+            <span class="project-tag tag-ml">MLflow</span>
+            <span class="project-tag tag-ml">PySpark</span>
+          </div>
+        </article>
+
+        <!-- PCM -->
+        <article class="project-card fade-in fade-in-delay-1">
+          <div class="project-card-header">
+            <div class="project-icon icon-r">R</div>
+            <svg class="project-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </div>
+          <h3 class="project-name">Pulse Condition Monitoring</h3>
+          <span class="project-client">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+            Haver &amp; Boecker Latinoamericana
+          </span>
+          <p class="project-desc">
+            Pipelines ETL de alta performance em R com processamento paralelo e assíncrono de sinais FFT e TWF para monitoramento de condição de máquinas. Sistema write-heavy com arquitetura baseada em {targets} e {crew}.
+          </p>
+          <div class="project-tags">
+            <span class="project-tag tag-r">R</span>
+            <span class="project-tag tag-iot">FFT / TWF</span>
+            <span class="project-tag tag-ml">targets</span>
+            <span class="project-tag tag-ml">crew</span>
+            <span class="project-tag tag-iot">IoT</span>
+          </div>
+        </article>
+
+        <!-- Belt Filters -->
+        <article class="project-card fade-in fade-in-delay-2">
+          <div class="project-card-header">
+            <div class="project-icon icon-python">PY</div>
+            <svg class="project-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </div>
+          <h3 class="project-name">Otimização de Filtros de Correia</h3>
+          <span class="project-client">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+            Nexa Resources — Três Marias
+          </span>
+          <p class="project-desc">
+            Pacote Python <code style="font-family: var(--font-mono); font-size: 0.82em; color: var(--accent);">nexa-tm-belt-filters</code> para predição de desempenho e otimização multi-objetivo via Pymoo, maximizando eficiência e minimizando consumo no sistema de filtros de correia.
+          </p>
+          <div class="project-tags">
+            <span class="project-tag tag-python">Python</span>
+            <span class="project-tag tag-ml">Pymoo</span>
+            <span class="project-tag tag-ml">Otimização Multi-objetivo</span>
+          </div>
+        </article>
+
+        <!-- Time-to-Critical -->
+        <article class="project-card fade-in fade-in-delay-3">
+          <div class="project-card-header">
+            <div class="project-icon icon-go">GO</div>
+            <svg class="project-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </div>
+          <h3 class="project-name">Time-to-Critical</h3>
+          <span class="project-client">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+            AGX Soluções
+          </span>
+          <p class="project-desc">
+            Ferramenta CLI de alta performance em Go para previsão de séries temporais via FFT com detecção inteligente de tendências e estimativa do tempo até falha crítica em equipamentos industriais monitorados.
+          </p>
+          <div class="project-tags">
+            <span class="project-tag tag-go">Go</span>
+            <span class="project-tag tag-iot">FFT</span>
+            <span class="project-tag tag-ml">Séries Temporais</span>
+            <span class="project-tag tag-devops">CLI</span>
+          </div>
+        </article>
+
+        <!-- Crush-Sense -->
+        <article class="project-card fade-in fade-in-delay-4">
+          <div class="project-card-header">
+            <div class="project-icon icon-python">PY</div>
+            <svg class="project-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </div>
+          <h3 class="project-name">Crush-Sense</h3>
+          <span class="project-client">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+            Metso Minerals — Brasil
+          </span>
+          <p class="project-desc">
+            Biblioteca Python para monitoramento e otimização de plantas de britagem utilizando redes neurais. Deploy containerizado via Docker com integração OPC-UA para comunicação direta com hardware industrial.
+          </p>
+          <div class="project-tags">
+            <span class="project-tag tag-python">Python</span>
+            <span class="project-tag tag-ml">Redes Neurais</span>
+            <span class="project-tag tag-devops">Docker</span>
+            <span class="project-tag tag-iot">OPC-UA</span>
+          </div>
+        </article>
+
+        <!-- PCM Diagnostics -->
+        <article class="project-card fade-in fade-in-delay-5">
+          <div class="project-card-header">
+            <div class="project-icon icon-r">R</div>
+            <svg class="project-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </div>
+          <h3 class="project-name">PCM Diagnostics &amp; Alarms</h3>
+          <span class="project-client">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+            Haver &amp; Boecker Latinoamericana
+          </span>
+          <p class="project-desc">
+            Sistema automatizado de monitoramento de alarmes e geração de relatórios diagnósticos multilíngues em R/R Markdown, com distribuição por e-mail para equipes técnicas em múltiplos países da América Latina.
+          </p>
+          <div class="project-tags">
+            <span class="project-tag tag-r">R</span>
+            <span class="project-tag tag-r">R Markdown</span>
+            <span class="project-tag tag-ml">Automação</span>
+            <span class="project-tag tag-iot">Alarmes</span>
+          </div>
+        </article>
+
+        <!-- AggXtream -->
+        <article class="project-card fade-in">
+          <div class="project-card-header">
+            <div class="project-icon icon-python">SIM</div>
+            <svg class="project-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </div>
+          <h3 class="project-name">AggXtream Simulator</h3>
+          <span class="project-client">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+            LafargeHolcim / Votorantim Cimentos
+          </span>
+          <p class="project-desc">
+            Simulador dinâmico de circuitos de cominuição e classificação com calibração de modelos via IA. Implantado em plantas LatAm resultando em ganho de <strong style="color: var(--accent);">30% no OEE</strong>. Base do produto da AGX Soluções.
+          </p>
+          <div class="project-tags">
+            <span class="project-tag tag-ml">Simulação Dinâmica</span>
+            <span class="project-tag tag-ml">Calibração por IA</span>
+            <span class="project-tag tag-iot">Cominuição</span>
+            <span class="project-tag tag-iot">OEE</span>
+          </div>
+        </article>
+
+        <!-- AGIS -->
+        <article class="project-card fade-in fade-in-delay-1">
+          <div class="project-card-header">
+            <div class="project-icon icon-go">MES</div>
+            <svg class="project-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </div>
+          <h3 class="project-name">AGIS — Aggregate Plant Information System</h3>
+          <span class="project-client">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+            Holcim Brasil
+          </span>
+          <p class="project-desc">
+            Sistema de informação de planta para medição online de OEE em plantas de agregados. Coleta de dados em tempo real, dashboards operacionais e alertas automáticos para tomada de decisão baseada em dados.
+          </p>
+          <div class="project-tags">
+            <span class="project-tag tag-iot">OEE Online</span>
+            <span class="project-tag tag-iot">Tempo Real</span>
+            <span class="project-tag tag-ml">Dashboards</span>
+            <span class="project-tag tag-sql">SQL</span>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── EXPERIENCE ─── -->
+  <section id="experience">
+    <div class="container">
+      <p class="section-label fade-in">// experiência</p>
+      <h2 class="section-title fade-in fade-in-delay-1">Trajetória profissional</h2>
+      <div class="section-divider fade-in fade-in-delay-2"></div>
+
+      <div class="timeline">
+
+        <div class="timeline-item fade-in">
+          <div class="timeline-dot"></div>
+          <div class="timeline-period">Maio 2019 — Presente</div>
+          <div class="timeline-role">Diretor de Serviços Técnicos</div>
+          <div class="timeline-company">AGX Soluções em Otimização de Processos</div>
+          <div class="timeline-body">
+            <ul>
+              <li>Liderança técnica na criação de sistemas de inteligência industrial e infraestrutura de MLOps</li>
+              <li>Desenvolvimento de plataformas de predição e otimização para clientes como Nexa Resources, Haver &amp; Boecker e Metso Minerals</li>
+              <li>Arquitetura de pipelines ETL de alta performance para processamento de sinais industriais (FFT/TWF)</li>
+              <li>Deploy de modelos de ML em produção via Docker, OPC-UA e Databricks</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item fade-in fade-in-delay-1">
+          <div class="timeline-dot"></div>
+          <div class="timeline-period">Jan 2019 — Mai 2019</div>
+          <div class="timeline-role">Data Scientist &amp; Data Evangelist</div>
+          <div class="timeline-company">Lumini IT Solutions</div>
+          <div class="timeline-body">
+            Desenvolvimento de modelos preditivos e disseminação de cultura data-driven dentro da organização e para clientes.
+          </div>
+        </div>
+
+        <div class="timeline-item fade-in fade-in-delay-2">
+          <div class="timeline-dot dim"></div>
+          <div class="timeline-period dim">Jan 2017 — Nov 2018</div>
+          <div class="timeline-role">Sócio-Diretor Técnico</div>
+          <div class="timeline-company">Multi Consultoria Ambiental e Mineral</div>
+          <div class="timeline-body">
+            <ul>
+              <li>Otimização de produção de concreto utilizando Machine Learning</li>
+              <li>Criação de algoritmos de predição de fechamento de negócios integrados a CRM</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item fade-in fade-in-delay-3">
+          <div class="timeline-dot dim"></div>
+          <div class="timeline-period dim">Jan 2016 — Nov 2016</div>
+          <div class="timeline-role">Gerente Corporativo de Processos</div>
+          <div class="timeline-company">Votorantim Cimentos</div>
+          <div class="timeline-body">
+            Aplicação do simulador AggXtream para modelagem e otimização de processos em plantas de agregados, resultando em aumento de <strong style="color: var(--accent);">30% no OEE</strong>.
+          </div>
+        </div>
+
+        <div class="timeline-item fade-in fade-in-delay-4">
+          <div class="timeline-dot dim"></div>
+          <div class="timeline-period dim">Set 2001 — Dez 2015 &nbsp;·&nbsp; 14 anos</div>
+          <div class="timeline-role">Múltiplos Cargos de Liderança</div>
+          <div class="timeline-company">LafargeHolcim / Holcim Brasil</div>
+          <div class="timeline-body">
+            <ul>
+              <li><strong style="color: var(--text-primary);">Gerente Regional LatAm de Processos e CAPEX:</strong> Desenvolvimento do simulador dinâmico AggXtream com calibração por IA</li>
+              <li><strong style="color: var(--text-primary);">Quarry Manager:</strong> Desenvolvimento do AGIS para medição online de OEE em plantas de agregados</li>
+              <li><strong style="color: var(--text-primary);">Engenheiro de Minas / Supervisor:</strong> Gestão de CAPEX, comissionamento de automação e implementação de SAP PM/PS</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Education -->
+      <div style="margin-top: 5rem;">
+        <p class="section-label fade-in">// formação</p>
+        <h3 class="section-title fade-in fade-in-delay-1" style="font-size: clamp(1.4rem, 3vw, 2rem);">Educação &amp; Certificações</h3>
+        <div class="edu-grid fade-in fade-in-delay-2">
+
+          <div class="edu-card">
+            <div class="edu-degree">Mestrado em Engenharia Mineral</div>
+            <div class="edu-school">Universidade de São Paulo (USP) — Tratamento de Minérios</div>
+            <div class="edu-year">2007</div>
+          </div>
+
+          <div class="edu-card">
+            <div class="edu-degree">Postgraduate Certificate in Quarry Management</div>
+            <div class="edu-school">University of Leeds, Reino Unido — Graduado com Distinção</div>
+            <div class="edu-year">2011</div>
+          </div>
+
+          <div class="edu-card">
+            <div class="edu-degree">Graduação em Engenharia de Minas</div>
+            <div class="edu-school">Universidade de São Paulo (USP)</div>
+            <div class="edu-year">2001</div>
+          </div>
+
+          <div class="edu-card">
+            <div class="edu-degree">Data Science Specialization</div>
+            <div class="edu-school">Johns Hopkins University — R, Statistical Inference, ML, Regression</div>
+            <div class="edu-year">+256h certificadas</div>
+          </div>
+
+          <div class="edu-card">
+            <div class="edu-degree">AI &amp; ML with Go / Microservices</div>
+            <div class="edu-school">Udemy — Go, Docker, Kubernetes, Terraform</div>
+            <div class="edu-year">+84h certificadas</div>
+          </div>
+
+          <div class="edu-card">
+            <div class="edu-degree">Process Mining: Data Science in Action</div>
+            <div class="edu-school">Eindhoven University of Technology</div>
+            <div class="edu-year">22h certificadas</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── CONTACT ─── -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-card fade-in">
+        <p class="section-label" style="text-align: center; margin-bottom: 1rem;">// contato</p>
+        <h2 class="contact-headline">Vamos construir algo relevante</h2>
+        <p class="contact-sub">
+          Aberto a oportunidades em Data Science, MLOps, IoT industrial e Otimização de Processos. Se o problema é complexo, melhor ainda.
+        </p>
+        <div class="contact-links">
+          <a href="mailto:octaviodeliberato@gmail.com" class="contact-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+            octaviodeliberato@gmail.com
+          </a>
+          <a href="https://www.linkedin.com/in/odneto" target="_blank" rel="noopener" class="contact-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            linkedin.com/in/odneto
+          </a>
+          <a href="https://github.com/octaviodeliberato" target="_blank" rel="noopener" class="contact-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            github.com/octaviodeliberato
+          </a>
+        </div>
+        <div class="contact-cta-row">
+          <a href="https://www.linkedin.com/in/odneto" target="_blank" rel="noopener" class="btn btn-primary">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            Conectar no LinkedIn
+          </a>
+          <a href="https://github.com/octaviodeliberato" target="_blank" rel="noopener" class="btn btn-outline">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            Ver GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-copy">© 2025 Octavio Deliberato Neto — São Paulo, SP</span>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/odneto" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/octaviodeliberato" target="_blank" rel="noopener">GitHub</a>
+        <a href="#hero">Topo</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ─── NAVBAR SCROLL ───
+    const navbar = document.getElementById('navbar');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.scrollY;
+      if (currentScroll > 20) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+      lastScroll = currentScroll;
+    }, { passive: true });
+
+    // ─── MOBILE MENU ───
+    function toggleMenu() {
+      const links = document.getElementById('navLinks');
+      links.classList.toggle('open');
+    }
+
+    function closeMenu() {
+      const links = document.getElementById('navLinks');
+      links.classList.remove('open');
+    }
+
+    // ─── INTERSECTION OBSERVER — FADE IN ───
+    const fadeEls = document.querySelectorAll('.fade-in');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.12,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    fadeEls.forEach(el => observer.observe(el));
+
+    // ─── HERO ANIMATION ON LOAD ───
+    window.addEventListener('DOMContentLoaded', () => {
+      const heroContent = document.querySelector('.hero-content');
+      if (heroContent) {
+        heroContent.style.opacity = '0';
+        heroContent.style.transform = 'translateY(30px)';
+        heroContent.style.transition = 'opacity 0.9s cubic-bezier(0.4,0,0.2,1), transform 0.9s cubic-bezier(0.4,0,0.2,1)';
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            heroContent.style.opacity = '1';
+            heroContent.style.transform = 'translateY(0)';
+          }, 150);
+        });
+      }
+    });
+
+    // ─── SMOOTH SCROLL FOR ANCHOR LINKS ───
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          const offset = 64;
+          const top = target.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
